@@ -20,6 +20,9 @@ const serverlessConfiguration: AWS = {
         ],
       },
     ],
+    environment: {
+      TODOS_TABLE_NAME: '${self:custom.todos_table_name}',
+    },
   },
   custom: {
     todos_table_name: '${self:service}-${self:provider.stage}-todos',
