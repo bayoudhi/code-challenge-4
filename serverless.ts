@@ -11,6 +11,7 @@ const serverlessConfiguration: AWS = {
     lambdaHashingVersion: '20201221',
   },
   custom: {
+    todos_table_name: '${self:service}-${self:provider.stage}-todos',
     webpack: {
       webpackConfig: './webpack.config.js',
       includeModules: true,
@@ -31,6 +32,32 @@ const serverlessConfiguration: AWS = {
           },
         },
       ],
+    },
+  },
+  resources: {
+    Resources: {
+      TodosTable: {
+        Type: 'AWS::DynamoDB::Table',
+        Properties: {
+          TableName: '${self:custom.todos_table_name}',
+          AttributeDefinitions: [
+            {
+              AttributeName: 'id',
+              AttributeType: 'S',
+            },
+          ],
+          KeySchema: [
+            {
+              AttributeName: 'id',
+              KeyType: 'HASH',
+            },
+          ],
+          ProvisionedThroughput: {
+            ReadCapacityUnits: '1',
+            WriteCapacityUnits: '1',
+          },
+        },
+      },
     },
   },
 };
