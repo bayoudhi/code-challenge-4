@@ -228,4 +228,159 @@ describe('TodosRepository(db,tableName,uuid)', () => {
       });
     });
   });
+
+  describe('get(id)', () => {
+    describe('when id equals id007', () => {
+      const id = 'id007';
+      describe('when tableName equals todos-dev and db.get rejects', () => {
+        const tableName = 'todos-dev';
+        let db;
+        let promise;
+        let getResponse = new Error('Dynamodb is down');
+
+        beforeEach(() => {
+          promise = jest.fn().mockRejectedValue(getResponse);
+          db = {
+            get: jest.fn().mockReturnValue({ promise }),
+          };
+        });
+
+        describe('run', () => {
+          let result;
+          // expected result
+          const expectedResult = getResponse;
+          beforeEach(async () => {
+            try {
+              // test
+              await new TodosRepository(db, tableName, jest.fn()).get(id);
+            } catch (e) {
+              result = e;
+            }
+          });
+
+          it('should call db.get.promise once with right args', () => {
+            expect(promise).toBeCalledTimes(1);
+            expect(promise).toBeCalledWith();
+          });
+
+          it('should call db.get once with right args', () => {
+            expect(db.get).toBeCalledTimes(1);
+            expect(db.get).toBeCalledWith({
+              TableName: tableName,
+              Key: {
+                id,
+              },
+            });
+          });
+
+          it('should reject', () => {
+            expect(result).toEqual(expectedResult);
+          });
+        });
+      });
+
+      describe('when tableName equals todos-dev and db.get resolves without Item', () => {
+        const tableName = 'todos-dev';
+        let db;
+        let promise;
+        let getResponse = {};
+
+        beforeEach(() => {
+          promise = jest.fn().mockResolvedValue(getResponse);
+          db = {
+            get: jest.fn().mockReturnValue({ promise }),
+          };
+        });
+
+        describe('run', () => {
+          let result;
+
+          // expected result
+          const expectedResult = new Error('Item not found');
+
+          beforeEach(async () => {
+            try {
+              // test
+              await new TodosRepository(db, tableName, jest.fn()).get(id);
+            } catch (e) {
+              result = e;
+            }
+          });
+
+          it('should call db.get.promise once with right args', () => {
+            expect(promise).toBeCalledTimes(1);
+            expect(promise).toBeCalledWith();
+          });
+
+          it('should call db.get once with right args', () => {
+            expect(db.get).toBeCalledTimes(1);
+            expect(db.get).toBeCalledWith({
+              TableName: tableName,
+              Key: {
+                id,
+              },
+            });
+          });
+
+          it('should reject', () => {
+            expect(result).toEqual(expectedResult);
+          });
+        });
+      });
+
+      describe('when tableName equals todos-dev and db.get resolves with data', () => {
+        const tableName = 'todos-dev';
+        let db;
+        let promise;
+        let getResponse: DocumentClient.GetItemOutput = {
+          Item: {
+            id,
+            title: 'Test is awesome',
+          },
+        };
+
+        beforeEach(() => {
+          promise = jest.fn().mockResolvedValue(getResponse);
+          db = {
+            get: jest.fn().mockReturnValue({ promise }),
+          };
+        });
+
+        describe('run', () => {
+          let result;
+
+          // expected result
+          const expectedResult = getResponse.Item;
+
+          beforeEach(async () => {
+            try {
+              // test
+              result = await new TodosRepository(db, tableName, jest.fn()).get(
+                id,
+              );
+            } catch (e) {}
+          });
+
+          it('should call db.get.promise once with right args', () => {
+            expect(promise).toBeCalledTimes(1);
+            expect(promise).toBeCalledWith();
+          });
+
+          it('should call db.get once with right args', () => {
+            expect(db.get).toBeCalledTimes(1);
+            expect(db.get).toBeCalledWith({
+              TableName: tableName,
+              Key: {
+                id,
+              },
+            });
+          });
+
+          it('should resolve', () => {
+            expect(result).toEqual(expectedResult);
+          });
+        });
+      });
+    });
+  });
 });
