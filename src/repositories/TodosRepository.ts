@@ -29,13 +29,20 @@ export default class TodosRepository implements ITodosRepository {
     return newTodo;
   }
   update(id: string, todo: Todo): Promise<Todo> {
-    throw new Error('Method not implemented.');
+    throw new Error('Method not implemented.' + id + todo);
   }
-  delete(id: string): Promise<void> {
-    throw new Error('Method not implemented.');
+  async delete(id: string): Promise<void> {
+    await this.db
+      .delete({
+        TableName: this.tableName,
+        Key: {
+          id,
+        },
+      })
+      .promise();
   }
   get(id: string): Promise<Todo> {
-    throw new Error('Method not implemented.');
+    throw new Error('Method not implemented.' + id);
   }
   getAll(): Promise<Todo[]> {
     throw new Error('Method not implemented.');
