@@ -1,0 +1,49 @@
+{
+  "name": "code-challenge-4",
+  "version": "1.0.0",
+  "private": "true",
+  "description": "Serverless Guru - Code Challenge 4",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:cov": "jest --coverage",
+    "deploy:dev": "sls deploy --stage dev",
+    "deploy:prod": "sls deploy --stage prod"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@serverless/typescript": "^2.33.0",
+    "@types/aws-lambda": "^8.10.73",
+    "@types/jest": "^26.0.22",
+    "@types/node": "^14.14.37",
+    "serverless-prune-plugin": "^1.4.4",
+    "serverless-webpack": "^5.4.0",
+    "ts-jest": "^26.5.4",
+    "ts-loader": "^8.1.0",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.2.3",
+    "webpack": "^5.30.0"
+  },
+  "dependencies": {
+    "aws-lambda": "1.0.6"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "ts"
+    ],
+    "rootDir": "src",
+    "testRegex": ".*\\.test\\.ts$",
+    "transform": {
+      "^.+\\.(t|j)s$": "ts-jest"
+    },
+    "collectCoverageFrom": [
+      "**/*.(t|j)s"
+    ],
+    "coverageDirectory": "../coverage",
+    "testEnvironment": "node"
+  }
+}
