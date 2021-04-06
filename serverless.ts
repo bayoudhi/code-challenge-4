@@ -50,6 +50,9 @@ const serverlessConfiguration: AWS = {
     createTodo: {
       handler: 'src/lambdas/createTodo.handler',
     },
+    deleteTodo: {
+      handler: 'src/lambdas/deleteTodo.handler',
+    },
   },
   resources: {
     Resources: {
