@@ -5,5 +5,7 @@ export default interface ITodosRepository {
   update(id: string, todo: Todo): Promise<Todo>;
   delete(id: string): Promise<void>;
   get(id: string): Promise<Todo>;
-  getAll(): Promise<Todo[]>;
+  getAll(): Promise<{
+    Items: Todo[];
+  }>;
 }
