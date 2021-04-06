@@ -41,8 +41,19 @@ export default class TodosRepository implements ITodosRepository {
       })
       .promise();
   }
-  get(id: string): Promise<Todo> {
-    throw new Error('Method not implemented.' + id);
+  async get(id: string): Promise<Todo> {
+    const response = await this.db
+      .get({
+        TableName: this.tableName,
+        Key: {
+          id,
+        },
+      })
+      .promise();
+    if (!response.Item) {
+      throw new Error('Item not found');
+    }
+    return response.Item as Todo;
   }
   getAll(): Promise<Todo[]> {
     throw new Error('Method not implemented.');
