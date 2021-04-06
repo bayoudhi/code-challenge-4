@@ -59,6 +59,9 @@ const serverlessConfiguration: AWS = {
     getTodos: {
       handler: 'src/lambdas/getTodos.handler',
     },
+    updateTodo: {
+      handler: 'src/lambdas/updateTodo.handler',
+    },
   },
   resources: {
     Resources: {
