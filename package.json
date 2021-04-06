@@ -20,6 +20,7 @@
     "@types/jest": "^26.0.22",
     "@types/node": "^14.14.37",
     "@types/uuid": "^8.3.0",
+    "jest": "^26.6.3",
     "serverless-prune-plugin": "^1.4.4",
     "serverless-webpack": "^5.4.0",
     "ts-jest": "^26.5.4",
