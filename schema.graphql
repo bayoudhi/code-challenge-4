@@ -14,7 +14,7 @@ type Todo {
 }
 
 type Todos {
-  items: [Todo!]!
+  Items: [Todo!]!
   nextToken: String
 }
 
