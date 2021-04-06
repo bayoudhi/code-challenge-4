@@ -172,6 +172,7 @@ describe('TodosRepository(db,tableName,uuid)', () => {
               Key: {
                 id,
               },
+              ReturnValues: 'ALL_OLD',
             });
           });
 
@@ -185,7 +186,12 @@ describe('TodosRepository(db,tableName,uuid)', () => {
         const tableName = 'todos-dev';
         let db;
         let promise;
-        let deleteResponse = {};
+        let deleteResponse = {
+          Attributes: {
+            id,
+            updatedAt: 123,
+          },
+        };
 
         beforeEach(() => {
           promise = jest.fn().mockResolvedValue(deleteResponse);
@@ -196,6 +202,10 @@ describe('TodosRepository(db,tableName,uuid)', () => {
 
         describe('run', () => {
           let result;
+
+          // expected result
+          const expectedResult = deleteResponse.Attributes;
+
           beforeEach(async () => {
             try {
               // test
@@ -221,11 +231,12 @@ describe('TodosRepository(db,tableName,uuid)', () => {
               Key: {
                 id,
               },
+              ReturnValues: 'ALL_OLD',
             });
           });
 
           it('should resolve', () => {
-            expect(result).toBeUndefined();
+            expect(result).toEqual(expectedResult);
           });
         });
       });

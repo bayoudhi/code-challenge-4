@@ -28,7 +28,10 @@ export default class TodosRepository implements ITodosRepository {
       .promise();
     return newTodo;
   }
-  async update(id: string, todo: Todo): Promise<Todo> {
+  async update(
+    id: string,
+    todo: { title: string; completed: boolean },
+  ): Promise<Todo> {
     const resposne = await this.db
       .update({
         TableName: this.tableName,
@@ -53,15 +56,17 @@ export default class TodosRepository implements ITodosRepository {
       .promise();
     return resposne.Attributes as Todo;
   }
-  async delete(id: string): Promise<void> {
-    await this.db
+  async delete(id: string): Promise<Todo> {
+    const response = await this.db
       .delete({
         TableName: this.tableName,
         Key: {
           id,
         },
+        ReturnValues: 'ALL_OLD',
       })
       .promise();
+    return response.Attributes as Todo;
   }
   async get(id: string): Promise<Todo> {
     const response = await this.db
