@@ -74,7 +74,7 @@ describe('createHandler({todosRepository})(event)', () => {
           expect(todosRepository.create).toBeCalledWith(event.arguments.title);
         });
 
-        it('should reject', () => {
+        it('should resolve', () => {
           expect(result).toEqual(expectedResult);
         });
       });
