@@ -7,8 +7,8 @@ type Todo {
   id: ID!
   title: String!
   completed: Boolean!
-  createdAt: Int!
-  updatedAt: Int!
+  createdAt: scalar Long!
+  updatedAt: scalar Long!
 }
 
 type Todos {
