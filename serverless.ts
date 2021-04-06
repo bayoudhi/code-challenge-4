@@ -9,6 +9,17 @@ const serverlessConfiguration: AWS = {
     runtime: 'nodejs14.x',
     stage: "${opt:stage, 'dev'}",
     lambdaHashingVersion: '20201221',
+    iamRoleStatements: [
+      {
+        Effect: 'Allow',
+        Action: ['dynamodb:*'],
+        Resource: [
+          {
+            'Fn::GetAtt': ['TodosTable', 'Arn'],
+          },
+        ],
+      },
+    ],
   },
   custom: {
     todos_table_name: '${self:service}-${self:provider.stage}-todos',
