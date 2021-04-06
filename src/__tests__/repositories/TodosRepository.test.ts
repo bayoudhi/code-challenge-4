@@ -1,8 +1,9 @@
+import { DocumentClient } from 'aws-sdk/clients/dynamodb';
 import TodosRepository from '../../repositories/TodosRepository';
 
 jest.spyOn(Date, 'now').mockImplementation(() => 123);
 
-describe('TodosRepository', () => {
+describe('TodosRepository(db,tableName,uuid)', () => {
   describe('create(title)', () => {
     describe('when title equals "Go to cinema"', () => {
       const title = 'Go to cinema';
@@ -12,7 +13,7 @@ describe('TodosRepository', () => {
         beforeEach(() => {
           uuid = jest.fn().mockReturnValue(uuidResponse);
         });
-        describe('when tableName equals todos and db.put throws', () => {
+        describe('when tableName equals todos and db.put rejects', () => {
           const tableName = 'todos';
           let db;
           let promise;
@@ -120,9 +121,108 @@ describe('TodosRepository', () => {
               });
             });
 
-            it('should reject', () => {
+            it('should resolve', () => {
               expect(result).toEqual(expectedResult);
             });
+          });
+        });
+      });
+    });
+  });
+
+  describe('delete(id)', () => {
+    describe('when id equals id007', () => {
+      const id = 'id007';
+      describe('when tableName equals todos-dev and db.delete rejects', () => {
+        const tableName = 'todos-dev';
+        let db;
+        let promise;
+        let deleteResponse = new Error('Dynamodb is down');
+
+        beforeEach(() => {
+          promise = jest.fn().mockRejectedValue(deleteResponse);
+          db = {
+            delete: jest.fn().mockReturnValue({ promise }),
+          };
+        });
+
+        describe('run', () => {
+          let result;
+          // expected result
+          const expectedResult = deleteResponse;
+          beforeEach(async () => {
+            try {
+              // test
+              await new TodosRepository(db, tableName, jest.fn()).delete(id);
+            } catch (e) {
+              result = e;
+            }
+          });
+
+          it('should call db.delete.promise once with right args', () => {
+            expect(promise).toBeCalledTimes(1);
+            expect(promise).toBeCalledWith();
+          });
+
+          it('should call db.delete once with right args', () => {
+            expect(db.delete).toBeCalledTimes(1);
+            expect(db.delete).toBeCalledWith({
+              TableName: tableName,
+              Key: {
+                id,
+              },
+            });
+          });
+
+          it('should reject', () => {
+            expect(result).toEqual(expectedResult);
+          });
+        });
+      });
+
+      describe('when tableName equals todos-dev and db.delete resolves', () => {
+        const tableName = 'todos-dev';
+        let db;
+        let promise;
+        let deleteResponse = {};
+
+        beforeEach(() => {
+          promise = jest.fn().mockResolvedValue(deleteResponse);
+          db = {
+            delete: jest.fn().mockReturnValue({ promise }),
+          };
+        });
+
+        describe('run', () => {
+          let result;
+          // expected result
+          const expectedResult = undefined;
+          beforeEach(async () => {
+            try {
+              // test
+              await new TodosRepository(db, tableName, jest.fn()).delete(id);
+            } catch (e) {
+              result = e;
+            }
+          });
+
+          it('should call db.delete.promise once with right args', () => {
+            expect(promise).toBeCalledTimes(1);
+            expect(promise).toBeCalledWith();
+          });
+
+          it('should call db.delete once with right args', () => {
+            expect(db.delete).toBeCalledTimes(1);
+            expect(db.delete).toBeCalledWith({
+              TableName: tableName,
+              Key: {
+                id,
+              },
+            });
+          });
+
+          it('should resolve', () => {
+            expect(result).toEqual(expectedResult);
           });
         });
       });
