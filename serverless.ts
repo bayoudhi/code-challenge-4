@@ -47,6 +47,9 @@ const serverlessConfiguration: AWS = {
         },
       ],
     },
+    createTodo: {
+      handler: 'src/lambdas/createTodo.handler',
+    },
   },
   resources: {
     Resources: {
