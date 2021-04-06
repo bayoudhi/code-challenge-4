@@ -1,3 +1,5 @@
+scalar Long
+
 schema {
   query: Query
   mutation: Mutation
@@ -7,8 +9,8 @@ type Todo {
   id: ID!
   title: String!
   completed: Boolean!
-  createdAt: scalar Long!
-  updatedAt: scalar Long!
+  createdAt: Long!
+  updatedAt: Long!
 }
 
 type Todos {
