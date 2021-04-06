@@ -28,7 +28,10 @@ export default class TodosRepository implements ITodosRepository {
       .promise();
     return newTodo;
   }
-  async update(id: string, todo: Todo): Promise<Todo> {
+  async update(
+    id: string,
+    todo: { title: string; completed: boolean },
+  ): Promise<Todo> {
     const resposne = await this.db
       .update({
         TableName: this.tableName,
