@@ -28,8 +28,30 @@ export default class TodosRepository implements ITodosRepository {
       .promise();
     return newTodo;
   }
-  update(id: string, todo: Todo): Promise<Todo> {
-    throw new Error('Method not implemented.' + id + todo);
+  async update(id: string, todo: Todo): Promise<Todo> {
+    const resposne = await this.db
+      .update({
+        TableName: this.tableName,
+        Key: {
+          id,
+        },
+        ReturnValues: 'ALL_NEW',
+        UpdateExpression:
+          'SET #title = :title, #completed = :completed, #updatedAt = :now',
+        ConditionExpression: 'attribute_exists(id)',
+        ExpressionAttributeNames: {
+          '#title': 'title',
+          '#completed': 'completed',
+          '#updatedAt': 'updatedAt',
+        },
+        ExpressionAttributeValues: {
+          ':title': todo.title,
+          ':completed': todo.completed,
+          ':now': Date.now(),
+        },
+      })
+      .promise();
+    return resposne.Attributes as Todo;
   }
   async delete(id: string): Promise<void> {
     await this.db

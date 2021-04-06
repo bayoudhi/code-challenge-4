@@ -1,4 +1,5 @@
 import { DocumentClient } from 'aws-sdk/clients/dynamodb';
+import Todo from '../../repositories/models/Todo';
 import TodosRepository from '../../repositories/TodosRepository';
 
 jest.spyOn(Date, 'now').mockImplementation(() => 123);
@@ -195,12 +196,14 @@ describe('TodosRepository(db,tableName,uuid)', () => {
 
         describe('run', () => {
           let result;
-          // expected result
-          const expectedResult = undefined;
           beforeEach(async () => {
             try {
               // test
-              await new TodosRepository(db, tableName, jest.fn()).delete(id);
+              result = await new TodosRepository(
+                db,
+                tableName,
+                jest.fn(),
+              ).delete(id);
             } catch (e) {
               result = e;
             }
@@ -488,6 +491,155 @@ describe('TodosRepository(db,tableName,uuid)', () => {
 
         it('should resolve', () => {
           expect(result).toEqual(expectedResult);
+        });
+      });
+    });
+  });
+
+  describe('update(id,todo)', () => {
+    describe('when id equals id007 and todo is passed', () => {
+      const id = 'id007';
+      const todo: Todo = {
+        id,
+        completed: true,
+        title: 'Go to shcool',
+        createdAt: 1617716035000,
+        updatedAt: 1617716035000,
+      };
+
+      describe('when tableName equals todos-dev db.update rejects', () => {
+        const tableName = 'todos-dev';
+        let db;
+        let promise;
+        const updateResponse = new Error('Something wrong happened :(');
+
+        beforeEach(() => {
+          promise = jest.fn().mockRejectedValue(updateResponse);
+          db = {
+            update: jest.fn().mockReturnValue({ promise }),
+          };
+        });
+
+        describe('run', () => {
+          let result;
+
+          // expected result
+          const expectedResult = updateResponse;
+
+          beforeEach(async () => {
+            try {
+              // test
+              await new TodosRepository(db, tableName, jest.fn()).update(
+                id,
+                todo,
+              );
+            } catch (e) {
+              result = e;
+            }
+          });
+
+          it('should call db.update.promise once with right args', () => {
+            expect(promise).toBeCalledTimes(1);
+            expect(promise).toBeCalledWith();
+          });
+
+          it('should call db.update once with right args', () => {
+            expect(db.update).toBeCalledTimes(1);
+            expect(db.update).toBeCalledWith({
+              TableName: tableName,
+              Key: {
+                id,
+              },
+              ReturnValues: 'ALL_NEW',
+              UpdateExpression:
+                'SET #title = :title, #completed = :completed, #updatedAt = :now',
+              ConditionExpression: 'attribute_exists(id)',
+              ExpressionAttributeNames: {
+                '#title': 'title',
+                '#completed': 'completed',
+                '#updatedAt': 'updatedAt',
+              },
+              ExpressionAttributeValues: {
+                ':title': todo.title,
+                ':completed': todo.completed,
+                ':now': 123,
+              },
+            });
+          });
+
+          it('should reject', () => {
+            expect(result).toEqual(expectedResult);
+          });
+        });
+      });
+
+      describe('when tableName equals todos-dev db.update resolves', () => {
+        const tableName = 'todos-dev';
+        let db;
+        let promise;
+        const updateResponse: DocumentClient.UpdateItemOutput = {
+          Attributes: {
+            ...todo,
+            updatedAt: 123,
+          },
+        };
+
+        beforeEach(() => {
+          promise = jest.fn().mockResolvedValue(updateResponse);
+          db = {
+            update: jest.fn().mockReturnValue({ promise }),
+          };
+        });
+
+        describe('run', () => {
+          let result;
+
+          // expected result
+          const expectedResult = updateResponse.Attributes;
+
+          beforeEach(async () => {
+            try {
+              // test
+              result = await new TodosRepository(
+                db,
+                tableName,
+                jest.fn(),
+              ).update(id, todo);
+            } catch (e) {}
+          });
+
+          it('should call db.update.promise once with right args', () => {
+            expect(promise).toBeCalledTimes(1);
+            expect(promise).toBeCalledWith();
+          });
+
+          it('should call db.update once with right args', () => {
+            expect(db.update).toBeCalledTimes(1);
+            expect(db.update).toBeCalledWith({
+              TableName: tableName,
+              Key: {
+                id,
+              },
+              ReturnValues: 'ALL_NEW',
+              UpdateExpression:
+                'SET #title = :title, #completed = :completed, #updatedAt = :now',
+              ConditionExpression: 'attribute_exists(id)',
+              ExpressionAttributeNames: {
+                '#title': 'title',
+                '#completed': 'completed',
+                '#updatedAt': 'updatedAt',
+              },
+              ExpressionAttributeValues: {
+                ':title': todo.title,
+                ':completed': todo.completed,
+                ':now': 123,
+              },
+            });
+          });
+
+          it('should resolve', () => {
+            expect(result).toEqual(expectedResult);
+          });
         });
       });
     });
