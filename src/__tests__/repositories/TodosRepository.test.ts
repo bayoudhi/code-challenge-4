@@ -222,7 +222,7 @@ describe('TodosRepository(db,tableName,uuid)', () => {
           });
 
           it('should resolve', () => {
-            expect(result).toEqual(expectedResult);
+            expect(result).toBeUndefined();
           });
         });
       });
