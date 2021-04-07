@@ -42,6 +42,12 @@ export default class TodosRepository implements ITodosRepository {
     title: string;
     completed: boolean;
   }): Promise<Todo> {
+    if (!id) {
+      throw new Error('id is missing');
+    }
+    if (!title) {
+      throw new Error('title is missing');
+    }
     const resposne = await this.db
       .update({
         TableName: this.tableName,

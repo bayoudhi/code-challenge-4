@@ -1074,5 +1074,71 @@ describe('TodosRepository(db,tableName,uuid)', () => {
         });
       });
     });
+    describe('when id equals id007, completed equals true and title is an empty string', () => {
+      const id = 'id007';
+      const completed = true;
+      const title = '';
+
+      describe('run', () => {
+        let result;
+
+        // expected result
+        const expectedResult = new Error('title is missing');
+
+        beforeEach(async () => {
+          try {
+            // test
+            await new TodosRepository(
+              {} as DocumentClient,
+              'todos',
+              jest.fn(),
+            ).update({
+              id,
+              title,
+              completed,
+            });
+          } catch (e) {
+            result = e;
+          }
+        });
+
+        it('should reject', () => {
+          expect(result).toEqual(expectedResult);
+        });
+      });
+    });
+    describe('when id is an empty string', () => {
+      const id = '';
+      const completed = true;
+      const title = 'Go to home';
+
+      describe('run', () => {
+        let result;
+
+        // expected result
+        const expectedResult = new Error('id is missing');
+
+        beforeEach(async () => {
+          try {
+            // test
+            await new TodosRepository(
+              {} as DocumentClient,
+              'todos',
+              jest.fn(),
+            ).update({
+              id,
+              title,
+              completed,
+            });
+          } catch (e) {
+            result = e;
+          }
+        });
+
+        it('should reject', () => {
+          expect(result).toEqual(expectedResult);
+        });
+      });
+    });
   });
 });
