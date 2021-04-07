@@ -16,7 +16,7 @@ describe('TodosRepository(db,tableName,uuid)', () => {
 
         beforeEach(async () => {
           try {
-            let instance = new TodosRepository(
+            const instance = new TodosRepository(
               {} as DocumentClient,
               '',
               jest.fn(),
@@ -165,7 +165,7 @@ describe('TodosRepository(db,tableName,uuid)', () => {
         const tableName = 'todos-dev';
         let db;
         let promise;
-        let deleteResponse = new Error('Dynamodb is down');
+        const deleteResponse = new Error('Dynamodb is down');
 
         beforeEach(() => {
           promise = jest.fn().mockRejectedValue(deleteResponse);
@@ -213,7 +213,7 @@ describe('TodosRepository(db,tableName,uuid)', () => {
         const tableName = 'todos-dev';
         let db;
         let promise;
-        let deleteResponse = {
+        const deleteResponse = {
           Attributes: {
             id,
             updatedAt: 123,
@@ -277,7 +277,7 @@ describe('TodosRepository(db,tableName,uuid)', () => {
         const tableName = 'todos-dev';
         let db;
         let promise;
-        let getResponse = new Error('Dynamodb is down');
+        const getResponse = new Error('Dynamodb is down');
 
         beforeEach(() => {
           promise = jest.fn().mockRejectedValue(getResponse);
@@ -324,7 +324,7 @@ describe('TodosRepository(db,tableName,uuid)', () => {
         const tableName = 'todos-dev';
         let db;
         let promise;
-        let getResponse = {};
+        const getResponse = {};
 
         beforeEach(() => {
           promise = jest.fn().mockResolvedValue(getResponse);
@@ -373,7 +373,7 @@ describe('TodosRepository(db,tableName,uuid)', () => {
         const tableName = 'todos-dev';
         let db;
         let promise;
-        let getResponse: DocumentClient.GetItemOutput = {
+        const getResponse: DocumentClient.GetItemOutput = {
           Item: {
             id,
             title: 'Test is awesome',
