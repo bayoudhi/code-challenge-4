@@ -34,7 +34,9 @@ describe('createHandler({todosRepository})(event)', () => {
 
         it('should call todosRepository.create once with right args', () => {
           expect(todosRepository.create).toBeCalledTimes(1);
-          expect(todosRepository.create).toBeCalledWith(event.arguments.title);
+          expect(todosRepository.create).toBeCalledWith({
+            title: event.arguments.title,
+          });
         });
 
         it('should reject', () => {
@@ -71,7 +73,9 @@ describe('createHandler({todosRepository})(event)', () => {
 
         it('should call todosRepository.create once with right args', () => {
           expect(todosRepository.create).toBeCalledTimes(1);
-          expect(todosRepository.create).toBeCalledWith(event.arguments.title);
+          expect(todosRepository.create).toBeCalledWith({
+            title: event.arguments.title,
+          });
         });
 
         it('should resolve', () => {

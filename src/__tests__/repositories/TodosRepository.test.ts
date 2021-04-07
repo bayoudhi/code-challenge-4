@@ -22,7 +22,7 @@ describe('TodosRepository(db,tableName,uuid)', () => {
               jest.fn(),
             );
             // test
-            await instance.create(title);
+            await instance.create({ title });
           } catch (e) {
             result = e;
           }
@@ -59,7 +59,9 @@ describe('TodosRepository(db,tableName,uuid)', () => {
             beforeEach(async () => {
               try {
                 // test
-                await new TodosRepository(db, tableName, uuid).create(title);
+                await new TodosRepository(db, tableName, uuid).create({
+                  title,
+                });
               } catch (e) {
                 result = e;
               }
@@ -119,9 +121,9 @@ describe('TodosRepository(db,tableName,uuid)', () => {
             beforeEach(async () => {
               try {
                 // test
-                result = await new TodosRepository(db, tableName, uuid).create(
+                result = await new TodosRepository(db, tableName, uuid).create({
                   title,
-                );
+                });
               } catch (e) {}
             });
             it('should call uuid once with right args', () => {

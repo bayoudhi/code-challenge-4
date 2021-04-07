@@ -1,7 +1,7 @@
 import { Todo, Todos } from '../types';
 
 export default interface ITodosRepository {
-  create(title: string): Promise<Todo>;
+  create({ title }: { title: string }): Promise<Todo>;
   update(
     id: string,
     todo: { title: string; completed: boolean },
