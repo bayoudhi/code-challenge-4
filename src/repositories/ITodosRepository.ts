@@ -8,5 +8,5 @@ export default interface ITodosRepository {
   ): Promise<Todo>;
   delete(id: string): Promise<Todo>;
   get(id: string): Promise<Todo>;
-  getAll(): Promise<Todos>;
+  getAll({ limit, token }: { limit?: number; token?: string }): Promise<Todos>;
 }
