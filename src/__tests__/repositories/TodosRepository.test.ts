@@ -271,6 +271,32 @@ describe('TodosRepository(db,tableName,uuid)', () => {
         });
       });
     });
+    describe('when id is an empty string', () => {
+      const id = '';
+      describe('run', () => {
+        let result;
+        // expected result
+        const expectedResult = new Error('id is missing');
+        beforeEach(async () => {
+          try {
+            // test
+            await new TodosRepository(
+              {} as DocumentClient,
+              'tableName',
+              jest.fn(),
+            ).delete({
+              id,
+            });
+          } catch (e) {
+            result = e;
+          }
+        });
+
+        it('should reject', () => {
+          expect(result).toEqual(expectedResult);
+        });
+      });
+    });
   });
 
   describe('get({id})', () => {
@@ -423,6 +449,30 @@ describe('TodosRepository(db,tableName,uuid)', () => {
           it('should resolve', () => {
             expect(result).toEqual(expectedResult);
           });
+        });
+      });
+    });
+    describe('when id is an empty string', () => {
+      const id = '';
+      describe('run', () => {
+        let result;
+        // expected result
+        const expectedResult = new Error('id is missing');
+        beforeEach(async () => {
+          try {
+            // test
+            await new TodosRepository(
+              {} as DocumentClient,
+              'tableName',
+              jest.fn(),
+            ).get({ id });
+          } catch (e) {
+            result = e;
+          }
+        });
+
+        it('should reject', () => {
+          expect(result).toEqual(expectedResult);
         });
       });
     });
