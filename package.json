@@ -4,6 +4,7 @@
   "private": "true",
   "description": "Serverless Guru - Code Challenge 4",
   "scripts": {
+    "types": "tsc",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
