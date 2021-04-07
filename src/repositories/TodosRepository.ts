@@ -80,7 +80,7 @@ export default class TodosRepository implements ITodosRepository {
     return response.Attributes as Todo;
   }
 
-  async get(id: string): Promise<Todo> {
+  async get({ id }: { id: string }): Promise<Todo> {
     const response = await this.db
       .get({
         TableName: this.tableName,

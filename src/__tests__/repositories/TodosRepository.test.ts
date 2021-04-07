@@ -4,7 +4,7 @@ import TodosRepository from '../../repositories/TodosRepository';
 jest.spyOn(Date, 'now').mockImplementation(() => 123);
 
 describe('TodosRepository(db,tableName,uuid)', () => {
-  describe('create(title)', () => {
+  describe('create({title})', () => {
     describe('when title is an empty string', () => {
       const title = '';
       describe('run', () => {
@@ -159,7 +159,7 @@ describe('TodosRepository(db,tableName,uuid)', () => {
     });
   });
 
-  describe('delete(id)', () => {
+  describe('delete({ id })', () => {
     describe('when id equals id007', () => {
       const id = 'id007';
       describe('when tableName equals todos-dev and db.delete rejects', () => {
@@ -273,7 +273,7 @@ describe('TodosRepository(db,tableName,uuid)', () => {
     });
   });
 
-  describe('get(id)', () => {
+  describe('get({id})', () => {
     describe('when id equals id007', () => {
       const id = 'id007';
       describe('when tableName equals todos-dev and db.get rejects', () => {
@@ -296,7 +296,7 @@ describe('TodosRepository(db,tableName,uuid)', () => {
           beforeEach(async () => {
             try {
               // test
-              await new TodosRepository(db, tableName, jest.fn()).get(id);
+              await new TodosRepository(db, tableName, jest.fn()).get({ id });
             } catch (e) {
               result = e;
             }
@@ -345,7 +345,7 @@ describe('TodosRepository(db,tableName,uuid)', () => {
           beforeEach(async () => {
             try {
               // test
-              await new TodosRepository(db, tableName, jest.fn()).get(id);
+              await new TodosRepository(db, tableName, jest.fn()).get({ id });
             } catch (e) {
               result = e;
             }
@@ -399,9 +399,9 @@ describe('TodosRepository(db,tableName,uuid)', () => {
           beforeEach(async () => {
             try {
               // test
-              result = await new TodosRepository(db, tableName, jest.fn()).get(
+              result = await new TodosRepository(db, tableName, jest.fn()).get({
                 id,
-              );
+              });
             } catch (e) {}
           });
 
@@ -929,7 +929,7 @@ describe('TodosRepository(db,tableName,uuid)', () => {
     });
   });
 
-  describe('update(id,todo)', () => {
+  describe('update({id,title,completed})', () => {
     describe('when id equals id007 and completed equals true and title equals "Go to school"', () => {
       const id = 'id007';
       const completed = true;
