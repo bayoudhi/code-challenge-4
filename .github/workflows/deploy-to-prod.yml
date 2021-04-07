@@ -21,7 +21,7 @@ jobs:
         run: yarn lint
       - name: 🧪 Unit test
         run: yarn test
-      - name: 🚀 Deploy to "Prod"
+      - name: 🚀 Deploy to Prod
         uses: serverless/github-action@master
         with:
           args: deploy -s prod
