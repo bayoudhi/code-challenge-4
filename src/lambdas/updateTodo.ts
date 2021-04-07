@@ -11,7 +11,8 @@ export const createHandler = ({
   event: AppSyncResolverEvent<UpdateTodoArguments>,
 ): Promise<Todo> => {
   const { id, todo } = event.arguments;
-  return todosRepository.update(id, {
+  return todosRepository.update({
+    id,
     title: todo.title,
     completed: todo.completed,
   });

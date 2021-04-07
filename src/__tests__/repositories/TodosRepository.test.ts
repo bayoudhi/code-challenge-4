@@ -1,11 +1,10 @@
 import { DocumentClient } from 'aws-sdk/clients/dynamodb';
 import TodosRepository from '../../repositories/TodosRepository';
-import { Todo } from '../../types';
 
 jest.spyOn(Date, 'now').mockImplementation(() => 123);
 
 describe('TodosRepository(db,tableName,uuid)', () => {
-  describe('create(title)', () => {
+  describe('create({title})', () => {
     describe('when title is an empty string', () => {
       const title = '';
       describe('run', () => {
@@ -22,7 +21,7 @@ describe('TodosRepository(db,tableName,uuid)', () => {
               jest.fn(),
             );
             // test
-            await instance.create(title);
+            await instance.create({ title });
           } catch (e) {
             result = e;
           }
@@ -59,7 +58,9 @@ describe('TodosRepository(db,tableName,uuid)', () => {
             beforeEach(async () => {
               try {
                 // test
-                await new TodosRepository(db, tableName, uuid).create(title);
+                await new TodosRepository(db, tableName, uuid).create({
+                  title,
+                });
               } catch (e) {
                 result = e;
               }
@@ -119,9 +120,9 @@ describe('TodosRepository(db,tableName,uuid)', () => {
             beforeEach(async () => {
               try {
                 // test
-                result = await new TodosRepository(db, tableName, uuid).create(
+                result = await new TodosRepository(db, tableName, uuid).create({
                   title,
-                );
+                });
               } catch (e) {}
             });
             it('should call uuid once with right args', () => {
@@ -158,7 +159,7 @@ describe('TodosRepository(db,tableName,uuid)', () => {
     });
   });
 
-  describe('delete(id)', () => {
+  describe('delete({ id })', () => {
     describe('when id equals id007', () => {
       const id = 'id007';
       describe('when tableName equals todos-dev and db.delete rejects', () => {
@@ -181,7 +182,9 @@ describe('TodosRepository(db,tableName,uuid)', () => {
           beforeEach(async () => {
             try {
               // test
-              await new TodosRepository(db, tableName, jest.fn()).delete(id);
+              await new TodosRepository(db, tableName, jest.fn()).delete({
+                id,
+              });
             } catch (e) {
               result = e;
             }
@@ -240,7 +243,7 @@ describe('TodosRepository(db,tableName,uuid)', () => {
                 db,
                 tableName,
                 jest.fn(),
-              ).delete(id);
+              ).delete({ id });
             } catch (e) {
               result = e;
             }
@@ -270,7 +273,7 @@ describe('TodosRepository(db,tableName,uuid)', () => {
     });
   });
 
-  describe('get(id)', () => {
+  describe('get({id})', () => {
     describe('when id equals id007', () => {
       const id = 'id007';
       describe('when tableName equals todos-dev and db.get rejects', () => {
@@ -293,7 +296,7 @@ describe('TodosRepository(db,tableName,uuid)', () => {
           beforeEach(async () => {
             try {
               // test
-              await new TodosRepository(db, tableName, jest.fn()).get(id);
+              await new TodosRepository(db, tableName, jest.fn()).get({ id });
             } catch (e) {
               result = e;
             }
@@ -342,7 +345,7 @@ describe('TodosRepository(db,tableName,uuid)', () => {
           beforeEach(async () => {
             try {
               // test
-              await new TodosRepository(db, tableName, jest.fn()).get(id);
+              await new TodosRepository(db, tableName, jest.fn()).get({ id });
             } catch (e) {
               result = e;
             }
@@ -396,9 +399,9 @@ describe('TodosRepository(db,tableName,uuid)', () => {
           beforeEach(async () => {
             try {
               // test
-              result = await new TodosRepository(db, tableName, jest.fn()).get(
+              result = await new TodosRepository(db, tableName, jest.fn()).get({
                 id,
-              );
+              });
             } catch (e) {}
           });
 
@@ -926,16 +929,11 @@ describe('TodosRepository(db,tableName,uuid)', () => {
     });
   });
 
-  describe('update(id,todo)', () => {
-    describe('when id equals id007 and todo is passed', () => {
+  describe('update({id,title,completed})', () => {
+    describe('when id equals id007 and completed equals true and title equals "Go to school"', () => {
       const id = 'id007';
-      const todo: Todo = {
-        id,
-        completed: true,
-        title: 'Go to shcool',
-        createdAt: 1617716035000,
-        updatedAt: 1617716035000,
-      };
+      const completed = true;
+      const title = 'Go to school';
 
       describe('when tableName equals todos-dev db.update rejects', () => {
         const tableName = 'todos-dev';
@@ -959,10 +957,11 @@ describe('TodosRepository(db,tableName,uuid)', () => {
           beforeEach(async () => {
             try {
               // test
-              await new TodosRepository(db, tableName, jest.fn()).update(
+              await new TodosRepository(db, tableName, jest.fn()).update({
                 id,
-                todo,
-              );
+                title,
+                completed,
+              });
             } catch (e) {
               result = e;
             }
@@ -990,8 +989,8 @@ describe('TodosRepository(db,tableName,uuid)', () => {
                 '#updatedAt': 'updatedAt',
               },
               ExpressionAttributeValues: {
-                ':title': todo.title,
-                ':completed': todo.completed,
+                ':title': title,
+                ':completed': completed,
                 ':now': 123,
               },
             });
@@ -1009,7 +1008,9 @@ describe('TodosRepository(db,tableName,uuid)', () => {
         let promise;
         const updateResponse: DocumentClient.UpdateItemOutput = {
           Attributes: {
-            ...todo,
+            id,
+            title,
+            completed,
             updatedAt: 123,
           },
         };
@@ -1034,7 +1035,7 @@ describe('TodosRepository(db,tableName,uuid)', () => {
                 db,
                 tableName,
                 jest.fn(),
-              ).update(id, todo);
+              ).update({ id, title, completed });
             } catch (e) {}
           });
 
@@ -1060,8 +1061,8 @@ describe('TodosRepository(db,tableName,uuid)', () => {
                 '#updatedAt': 'updatedAt',
               },
               ExpressionAttributeValues: {
-                ':title': todo.title,
-                ':completed': todo.completed,
+                ':title': title,
+                ':completed': completed,
                 ':now': 123,
               },
             });

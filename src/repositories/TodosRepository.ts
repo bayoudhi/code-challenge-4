@@ -9,7 +9,7 @@ export default class TodosRepository implements ITodosRepository {
     private uuid: () => string,
   ) {}
 
-  async create(title: string): Promise<Todo> {
+  async create({ title }: { title: string }): Promise<Todo> {
     if (!title) {
       throw new Error('title is missing');
     }
@@ -33,10 +33,15 @@ export default class TodosRepository implements ITodosRepository {
     return newTodo;
   }
 
-  async update(
-    id: string,
-    todo: { title: string; completed: boolean },
-  ): Promise<Todo> {
+  async update({
+    id,
+    title,
+    completed,
+  }: {
+    id: string;
+    title: string;
+    completed: boolean;
+  }): Promise<Todo> {
     const resposne = await this.db
       .update({
         TableName: this.tableName,
@@ -53,8 +58,8 @@ export default class TodosRepository implements ITodosRepository {
           '#updatedAt': 'updatedAt',
         },
         ExpressionAttributeValues: {
-          ':title': todo.title,
-          ':completed': todo.completed,
+          ':title': title,
+          ':completed': completed,
           ':now': Date.now(),
         },
       })
@@ -62,7 +67,7 @@ export default class TodosRepository implements ITodosRepository {
     return resposne.Attributes as Todo;
   }
 
-  async delete(id: string): Promise<Todo> {
+  async delete({ id }: { id: string }): Promise<Todo> {
     const response = await this.db
       .delete({
         TableName: this.tableName,
@@ -75,7 +80,7 @@ export default class TodosRepository implements ITodosRepository {
     return response.Attributes as Todo;
   }
 
-  async get(id: string): Promise<Todo> {
+  async get({ id }: { id: string }): Promise<Todo> {
     const response = await this.db
       .get({
         TableName: this.tableName,

@@ -7,8 +7,11 @@ export const createHandler = ({
   todosRepository,
 }: {
   todosRepository: TodosRepository;
-}) => async (event: AppSyncResolverEvent<DeleteTodoArguments>): Promise<Todo> => {
-  return todosRepository.delete(event.arguments.id);
+}) => async (
+  event: AppSyncResolverEvent<DeleteTodoArguments>,
+): Promise<Todo> => {
+  const { id } = event.arguments;
+  return todosRepository.delete({ id });
 };
 
 export const handler = createHandler({

@@ -2,7 +2,7 @@ import { AppSyncResolverEvent } from 'aws-lambda';
 import { createHandler } from '../../lambdas/updateTodo';
 
 describe('createHandler({todosRepository})(event)', () => {
-  describe('when event.arguments.id equals "id1", todo.completed equals true and todo.title equals "Go to Cinema"', () => {
+  describe('when event.arguments.id equals "id1", event.arguments.todo.completed equals true and event.arguments.todo.title equals "Go to Cinema"', () => {
     const event = {
       arguments: {
         id: 'id1',
@@ -40,10 +40,11 @@ describe('createHandler({todosRepository})(event)', () => {
 
         it('should call todosRepository.update once with right args', () => {
           expect(todosRepository.update).toBeCalledTimes(1);
-          expect(todosRepository.update).toBeCalledWith(
-            event.arguments.id,
-            event.arguments.todo,
-          );
+          expect(todosRepository.update).toBeCalledWith({
+            id: event.arguments.id,
+            title: event.arguments.todo.title,
+            completed: event.arguments.todo.completed,
+          });
         });
 
         it('should reject', () => {
@@ -79,10 +80,11 @@ describe('createHandler({todosRepository})(event)', () => {
 
         it('should call todosRepository.update once with right args', () => {
           expect(todosRepository.update).toBeCalledTimes(1);
-          expect(todosRepository.update).toBeCalledWith(
-            event.arguments.id,
-            event.arguments.todo,
-          );
+          expect(todosRepository.update).toBeCalledWith({
+            id: event.arguments.id,
+            title: event.arguments.todo.title,
+            completed: event.arguments.todo.completed,
+          });
         });
 
         it('should resolve', () => {
