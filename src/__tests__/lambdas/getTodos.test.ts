@@ -1,5 +1,6 @@
 import { AppSyncResolverEvent } from 'aws-lambda';
 import { createHandler } from '../../lambdas/getTodos';
+import { GetTodosArguments } from '../../types';
 
 describe('createHandler({todosRepository})(event)', () => {
   describe('when todosRepository.getAll rejects', () => {
@@ -20,7 +21,7 @@ describe('createHandler({todosRepository})(event)', () => {
       beforeEach(async () => {
         try {
           await createHandler({ todosRepository })(
-            {} as AppSyncResolverEvent<{}>,
+            {} as AppSyncResolverEvent<GetTodosArguments>,
           );
         } catch (e) {
           result = e;
@@ -66,7 +67,7 @@ describe('createHandler({todosRepository})(event)', () => {
       beforeEach(async () => {
         try {
           result = await createHandler({ todosRepository })(
-            {} as AppSyncResolverEvent<{}>,
+            {} as AppSyncResolverEvent<GetTodosArguments>,
           );
         } catch (e) {}
       });

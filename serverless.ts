@@ -119,17 +119,6 @@ const serverlessConfiguration: AWS = {
     individually: true,
   },
   functions: {
-    hello: {
-      handler: 'src/hello.handler',
-      events: [
-        {
-          http: {
-            path: '/',
-            method: 'GET',
-          },
-        },
-      ],
-    },
     createTodo: {
       handler: 'src/lambdas/createTodo.handler',
     },

@@ -1,4 +1,4 @@
-import TodosRepository from '../repositories/TodosRepository';
+import TodosRepository from './TodosRepository';
 import { DynamoDB } from 'aws-sdk';
 import { v4 as uuid } from 'uuid';
 

@@ -16,9 +16,11 @@ jobs:
           node-version: "14.x"
       - name: 📦 Install dependencies
         run: yarn
+      - name: 🔣 Lint
+        run: yarn lint
       - name: 🧪 Unit test
         run: yarn test
-      - name: serverless deploy
+      - name: 🚀 Deploy to Dev
         uses: serverless/github-action@master
         with:
           args: deploy

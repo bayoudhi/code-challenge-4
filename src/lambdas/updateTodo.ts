@@ -1,19 +1,20 @@
 import { AppSyncResolverEvent } from 'aws-lambda';
 import { todosRepository } from '../repositories';
-import Todo from '../repositories/models/Todo';
 import TodosRepository from '../repositories/TodosRepository';
+import { Todo, UpdateTodoArguments } from '../types';
 
 export const createHandler = ({
   todosRepository,
 }: {
   todosRepository: TodosRepository;
 }) => async (
-  event: AppSyncResolverEvent<{
-    id: string;
-    todo: { completed: boolean; title: string };
-  }>,
+  event: AppSyncResolverEvent<UpdateTodoArguments>,
 ): Promise<Todo> => {
-  return todosRepository.update(event.arguments.id, event.arguments.todo);
+  const { id, todo } = event.arguments;
+  return todosRepository.update(id, {
+    title: todo.title,
+    completed: todo.completed,
+  });
 };
 
 export const handler = createHandler({

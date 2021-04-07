@@ -1,6 +1,6 @@
 import { DocumentClient } from 'aws-sdk/clients/dynamodb';
-import ITodosRepository from './interfaces/ITodosRepository';
-import Todo from './models/Todo';
+import { Todo, Todos } from '../types';
+import ITodosRepository from './ITodosRepository';
 
 export default class TodosRepository implements ITodosRepository {
   constructor(
@@ -8,6 +8,7 @@ export default class TodosRepository implements ITodosRepository {
     private tableName: string,
     private uuid: () => string,
   ) {}
+
   async create(title: string): Promise<Todo> {
     if (!title) {
       throw new Error('title is missing');
@@ -31,6 +32,7 @@ export default class TodosRepository implements ITodosRepository {
       .promise();
     return newTodo;
   }
+
   async update(
     id: string,
     todo: { title: string; completed: boolean },
@@ -59,6 +61,7 @@ export default class TodosRepository implements ITodosRepository {
       .promise();
     return resposne.Attributes as Todo;
   }
+
   async delete(id: string): Promise<Todo> {
     const response = await this.db
       .delete({
@@ -71,6 +74,7 @@ export default class TodosRepository implements ITodosRepository {
       .promise();
     return response.Attributes as Todo;
   }
+
   async get(id: string): Promise<Todo> {
     const response = await this.db
       .get({
@@ -85,7 +89,8 @@ export default class TodosRepository implements ITodosRepository {
     }
     return response.Item as Todo;
   }
-  async getAll(): Promise<{ Items: Todo[] }> {
+
+  async getAll(): Promise<Todos> {
     const response = await this.db
       .scan({ TableName: this.tableName })
       .promise();

@@ -1,6 +1,6 @@
 import { AppSyncResolverEvent } from 'aws-lambda';
 import { createHandler } from '../../lambdas/createTodo';
-import Todo from '../../repositories/models/Todo';
+import { Todo } from '../../types';
 
 describe('createHandler({todosRepository})(event)', () => {
   describe('when event.arguments.title equals "Play Basketball"', () => {
