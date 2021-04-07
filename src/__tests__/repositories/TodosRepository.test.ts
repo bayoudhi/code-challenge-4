@@ -182,7 +182,9 @@ describe('TodosRepository(db,tableName,uuid)', () => {
           beforeEach(async () => {
             try {
               // test
-              await new TodosRepository(db, tableName, jest.fn()).delete(id);
+              await new TodosRepository(db, tableName, jest.fn()).delete({
+                id,
+              });
             } catch (e) {
               result = e;
             }
@@ -241,7 +243,7 @@ describe('TodosRepository(db,tableName,uuid)', () => {
                 db,
                 tableName,
                 jest.fn(),
-              ).delete(id);
+              ).delete({ id });
             } catch (e) {
               result = e;
             }

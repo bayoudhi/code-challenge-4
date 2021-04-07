@@ -67,7 +67,7 @@ export default class TodosRepository implements ITodosRepository {
     return resposne.Attributes as Todo;
   }
 
-  async delete(id: string): Promise<Todo> {
+  async delete({ id }: { id: string }): Promise<Todo> {
     const response = await this.db
       .delete({
         TableName: this.tableName,

@@ -33,7 +33,9 @@ describe('createHandler({todosRepository})(event)', () => {
 
         it('should call todosRepository.delete once with right args', () => {
           expect(todosRepository.delete).toBeCalledTimes(1);
-          expect(todosRepository.delete).toBeCalledWith(event.arguments.id);
+          expect(todosRepository.delete).toBeCalledWith({
+            id: event.arguments.id,
+          });
         });
 
         it('should reject', () => {
@@ -67,7 +69,9 @@ describe('createHandler({todosRepository})(event)', () => {
 
         it('should call todosRepository.delete once with right args', () => {
           expect(todosRepository.delete).toBeCalledTimes(1);
-          expect(todosRepository.delete).toBeCalledWith(event.arguments.id);
+          expect(todosRepository.delete).toBeCalledWith({
+            id: event.arguments.id,
+          });
         });
 
         it('should resolve', () => {
