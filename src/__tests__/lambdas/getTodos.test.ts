@@ -30,7 +30,7 @@ describe('createHandler({todosRepository})(event)', () => {
 
       it('should call todosRepository.getAll once with right args', () => {
         expect(todosRepository.getAll).toBeCalledTimes(1);
-        expect(todosRepository.getAll).toBeCalledWith();
+        expect(todosRepository.getAll).toBeCalledWith({});
       });
 
       it('should reject', () => {
@@ -74,7 +74,7 @@ describe('createHandler({todosRepository})(event)', () => {
 
       it('should call todosRepository.getAll once with right args', () => {
         expect(todosRepository.getAll).toBeCalledTimes(1);
-        expect(todosRepository.getAll).toBeCalledWith();
+        expect(todosRepository.getAll).toBeCalledWith({});
       });
 
       it('should resolve', () => {

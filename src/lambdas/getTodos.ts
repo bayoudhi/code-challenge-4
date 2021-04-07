@@ -11,7 +11,7 @@ export const createHandler = ({
 }) => async (
   _event: AppSyncResolverEvent<GetTodosArguments>,
 ): Promise<Todos> => {
-  return todosRepository.getAll();
+  return todosRepository.getAll({});
 };
 
 export const handler = createHandler({
