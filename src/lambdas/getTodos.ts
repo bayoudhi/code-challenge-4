@@ -9,9 +9,10 @@ export const createHandler = ({
 }: {
   todosRepository: TodosRepository;
 }) => async (
-  _event: AppSyncResolverEvent<GetTodosArguments>,
+  event: AppSyncResolverEvent<GetTodosArguments>,
 ): Promise<Todos> => {
-  return todosRepository.getAll({});
+  const { limit, token } = event.arguments || {};
+  return todosRepository.getAll({ limit, token });
 };
 
 export const handler = createHandler({
