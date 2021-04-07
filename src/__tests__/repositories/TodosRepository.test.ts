@@ -6,6 +6,33 @@ jest.spyOn(Date, 'now').mockImplementation(() => 123);
 
 describe('TodosRepository(db,tableName,uuid)', () => {
   describe('create(title)', () => {
+    describe('when title is an empty string', () => {
+      const title = '';
+      describe('run', () => {
+        let result;
+
+        // expected result
+        const expectedResult = new Error('title is missing');
+
+        beforeEach(async () => {
+          try {
+            let instance = new TodosRepository(
+              {} as DocumentClient,
+              '',
+              jest.fn(),
+            );
+            // test
+            await instance.create(title);
+          } catch (e) {
+            result = e;
+          }
+        });
+
+        it('should reject', () => {
+          expect(result).toEqual(expectedResult);
+        });
+      });
+    });
     describe('when title equals "Go to cinema"', () => {
       const title = 'Go to cinema';
       describe('when uuid returns abc123', () => {

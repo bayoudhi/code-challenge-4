@@ -9,6 +9,9 @@ export default class TodosRepository implements ITodosRepository {
     private uuid: () => string,
   ) {}
   async create(title: string): Promise<Todo> {
+    if (!title) {
+      throw new Error('title is missing');
+    }
     const id = this.uuid();
     const now = Date.now();
     const newTodo = {
