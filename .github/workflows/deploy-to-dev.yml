@@ -16,6 +16,8 @@ jobs:
           node-version: "14.x"
       - name: 📦 Install dependencies
         run: yarn
+      - name: 🔣 Types checking
+        run: yarn types
       - name: 🧪 Unit test
         run: yarn test
       - name: serverless deploy
