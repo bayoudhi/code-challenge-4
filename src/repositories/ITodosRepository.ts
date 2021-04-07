@@ -1,4 +1,4 @@
-import Todo from '../models/Todo';
+import { Todo, Todos } from '../types';
 
 export default interface ITodosRepository {
   create(title: string): Promise<Todo>;
@@ -8,7 +8,5 @@ export default interface ITodosRepository {
   ): Promise<Todo>;
   delete(id: string): Promise<Todo>;
   get(id: string): Promise<Todo>;
-  getAll(): Promise<{
-    Items: Todo[];
-  }>;
+  getAll(): Promise<Todos>;
 }

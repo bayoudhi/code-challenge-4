@@ -1,6 +1,6 @@
 import { DocumentClient } from 'aws-sdk/clients/dynamodb';
-import Todo from '../../repositories/models/Todo';
 import TodosRepository from '../../repositories/TodosRepository';
+import { Todo } from '../../types';
 
 jest.spyOn(Date, 'now').mockImplementation(() => 123);
 
