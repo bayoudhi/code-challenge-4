@@ -87,6 +87,9 @@ export default class TodosRepository implements ITodosRepository {
   }
 
   async get({ id }: { id: string }): Promise<Todo> {
+    if (!id) {
+      throw new Error('id is missing');
+    }
     const response = await this.db
       .get({
         TableName: this.tableName,
