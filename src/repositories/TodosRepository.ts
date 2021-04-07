@@ -90,12 +90,30 @@ export default class TodosRepository implements ITodosRepository {
     return response.Item as Todo;
   }
 
-  async getAll(): Promise<Todos> {
+  async getAll({
+    limit,
+    token,
+  }: {
+    limit?: number;
+    token?: string;
+  }): Promise<Todos> {
     const response = await this.db
-      .scan({ TableName: this.tableName })
+      .scan({
+        TableName: this.tableName,
+        Limit: limit,
+        ExclusiveStartKey:
+          (token && JSON.parse(decodeURIComponent(token))) || undefined,
+      })
       .promise();
-    return {
+
+    const todos: Todos = {
       Items: response.Items as Todo[],
+      nextToken:
+        (response.LastEvaluatedKey &&
+          encodeURIComponent(JSON.stringify(response.LastEvaluatedKey))) ||
+        undefined,
     };
+
+    return todos;
   }
 }

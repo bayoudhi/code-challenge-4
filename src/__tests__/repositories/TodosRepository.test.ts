@@ -425,110 +425,502 @@ describe('TodosRepository(db,tableName,uuid)', () => {
     });
   });
 
-  describe('getAll()', () => {
-    describe('when tableName equals todos-dev and db.scan rejects', () => {
-      const tableName = 'todos-dev';
-      let db;
-      let promise;
-      const scanResponse = new Error('Error happened!');
+  describe('getAll({limit,nextToken})', () => {
+    describe('when limit and nextToken are not passed', () => {
+      describe('when tableName equals todos-dev and db.scan rejects', () => {
+        const tableName = 'todos-dev';
+        let db;
+        let promise;
+        const scanResponse = new Error('Error happened!');
 
-      beforeEach(() => {
-        promise = jest.fn().mockRejectedValue(scanResponse);
-        db = {
-          scan: jest.fn().mockReturnValue({ promise }),
-        };
-      });
-
-      describe('run', () => {
-        let result;
-
-        // expected result
-        const expectedResult = scanResponse;
-
-        beforeEach(async () => {
-          try {
-            // test
-            await new TodosRepository(db, tableName, jest.fn()).getAll();
-          } catch (e) {
-            result = e;
-          }
+        beforeEach(() => {
+          promise = jest.fn().mockRejectedValue(scanResponse);
+          db = {
+            scan: jest.fn().mockReturnValue({ promise }),
+          };
         });
 
-        it('should call db.scan.promise once with right args', () => {
-          expect(promise).toBeCalledTimes(1);
-          expect(promise).toBeCalledWith();
-        });
+        describe('run', () => {
+          let result;
 
-        it('should call db.scan once with right args', () => {
-          expect(db.scan).toBeCalledTimes(1);
-          expect(db.scan).toBeCalledWith({
-            TableName: tableName,
+          // expected result
+          const expectedResult = scanResponse;
+
+          beforeEach(async () => {
+            try {
+              // test
+              await new TodosRepository(db, tableName, jest.fn()).getAll({});
+            } catch (e) {
+              result = e;
+            }
+          });
+
+          it('should call db.scan.promise once with right args', () => {
+            expect(promise).toBeCalledTimes(1);
+            expect(promise).toBeCalledWith();
+          });
+
+          it('should call db.scan once with right args', () => {
+            expect(db.scan).toBeCalledTimes(1);
+            expect(db.scan).toBeCalledWith({
+              TableName: tableName,
+            });
+          });
+
+          it('should reject', () => {
+            expect(result).toEqual(expectedResult);
           });
         });
+      });
 
-        it('should reject', () => {
-          expect(result).toEqual(expectedResult);
+      describe('when tableName equals todos-dev and db.scan resolves', () => {
+        const tableName = 'todos-dev';
+        let db;
+        let promise;
+        const scanResponse: DocumentClient.ScanOutput = {
+          Items: [
+            {
+              id: 'id1',
+              title: 'Task 1',
+              completed: true,
+            },
+            {
+              id: 'id2',
+              title: 'Task 2',
+              completed: false,
+            },
+          ],
+        };
+
+        beforeEach(() => {
+          promise = jest.fn().mockResolvedValue(scanResponse);
+          db = {
+            scan: jest.fn().mockReturnValue({ promise }),
+          };
+        });
+
+        describe('run', () => {
+          let result;
+
+          // expected result
+          const expectedResult = scanResponse;
+
+          beforeEach(async () => {
+            try {
+              // test
+              result = await new TodosRepository(
+                db,
+                tableName,
+                jest.fn(),
+              ).getAll({});
+            } catch (e) {}
+          });
+
+          it('should call db.scan.promise once with right args', () => {
+            expect(promise).toBeCalledTimes(1);
+            expect(promise).toBeCalledWith();
+          });
+
+          it('should call db.scan once with right args', () => {
+            expect(db.scan).toBeCalledTimes(1);
+            expect(db.scan).toBeCalledWith({
+              TableName: tableName,
+            });
+          });
+
+          it('should resolve', () => {
+            expect(result).toEqual(expectedResult);
+          });
         });
       });
     });
+    describe('when limit equals 10', () => {
+      const limit = 10;
+      describe('when tableName equals todos-dev and db.scan rejects', () => {
+        const tableName = 'todos-dev';
+        let db;
+        let promise;
+        const scanResponse = new Error('Error happened!');
 
-    describe('when tableName equals todos-dev and db.scan resolves', () => {
-      const tableName = 'todos-dev';
-      let db;
-      let promise;
-      const scanResponse: DocumentClient.ScanOutput = {
-        Items: [
-          {
-            id: 'id1',
-            title: 'Task 1',
-            completed: true,
-          },
-          {
-            id: 'id2',
-            title: 'Task 2',
-            completed: false,
-          },
-        ],
-      };
-
-      beforeEach(() => {
-        promise = jest.fn().mockResolvedValue(scanResponse);
-        db = {
-          scan: jest.fn().mockReturnValue({ promise }),
-        };
-      });
-
-      describe('run', () => {
-        let result;
-
-        // expected result
-        const expectedResult = scanResponse;
-
-        beforeEach(async () => {
-          try {
-            // test
-            result = await new TodosRepository(
-              db,
-              tableName,
-              jest.fn(),
-            ).getAll();
-          } catch (e) {}
+        beforeEach(() => {
+          promise = jest.fn().mockRejectedValue(scanResponse);
+          db = {
+            scan: jest.fn().mockReturnValue({ promise }),
+          };
         });
 
-        it('should call db.scan.promise once with right args', () => {
-          expect(promise).toBeCalledTimes(1);
-          expect(promise).toBeCalledWith();
-        });
+        describe('run', () => {
+          let result;
 
-        it('should call db.scan once with right args', () => {
-          expect(db.scan).toBeCalledTimes(1);
-          expect(db.scan).toBeCalledWith({
-            TableName: tableName,
+          // expected result
+          const expectedResult = scanResponse;
+
+          beforeEach(async () => {
+            try {
+              // test
+              await new TodosRepository(db, tableName, jest.fn()).getAll({
+                limit,
+              });
+            } catch (e) {
+              result = e;
+            }
+          });
+
+          it('should call db.scan.promise once with right args', () => {
+            expect(promise).toBeCalledTimes(1);
+            expect(promise).toBeCalledWith();
+          });
+
+          it('should call db.scan once with right args', () => {
+            expect(db.scan).toBeCalledTimes(1);
+            expect(db.scan).toBeCalledWith({
+              TableName: tableName,
+              Limit: limit,
+            });
+          });
+
+          it('should reject', () => {
+            expect(result).toEqual(expectedResult);
           });
         });
+      });
 
-        it('should resolve', () => {
-          expect(result).toEqual(expectedResult);
+      describe('when tableName equals todos-dev and db.scan resolves', () => {
+        const tableName = 'todos-dev';
+        let db;
+        let promise;
+        const scanResponse: DocumentClient.ScanOutput = {
+          Items: [
+            {
+              id: 'id1',
+              title: 'Task 1',
+              completed: true,
+            },
+            {
+              id: 'id2',
+              title: 'Task 2',
+              completed: false,
+            },
+          ],
+        };
+
+        beforeEach(() => {
+          promise = jest.fn().mockResolvedValue(scanResponse);
+          db = {
+            scan: jest.fn().mockReturnValue({ promise }),
+          };
+        });
+
+        describe('run', () => {
+          let result;
+
+          // expected result
+          const expectedResult = scanResponse;
+
+          beforeEach(async () => {
+            try {
+              // test
+              result = await new TodosRepository(
+                db,
+                tableName,
+                jest.fn(),
+              ).getAll({ limit });
+            } catch (e) {}
+          });
+
+          it('should call db.scan.promise once with right args', () => {
+            expect(promise).toBeCalledTimes(1);
+            expect(promise).toBeCalledWith();
+          });
+
+          it('should call db.scan once with right args', () => {
+            expect(db.scan).toBeCalledTimes(1);
+            expect(db.scan).toBeCalledWith({
+              TableName: tableName,
+              Limit: limit,
+            });
+          });
+
+          it('should resolve', () => {
+            expect(result).toEqual(expectedResult);
+          });
+        });
+      });
+
+      describe('when tableName equals todos-dev and db.scan resolves with LastEvaluatedKey object', () => {
+        const tableName = 'todos-dev';
+        let db;
+        let promise;
+        const scanResponse: DocumentClient.ScanOutput = {
+          Items: [
+            {
+              id: 'id1',
+              title: 'Task 1',
+              completed: true,
+            },
+            {
+              id: 'id2',
+              title: 'Task 2',
+              completed: false,
+            },
+          ],
+          ScannedCount: 2,
+          Count: 2,
+          LastEvaluatedKey: {
+            id: 'id3',
+            title: 'Task3',
+            completed: false,
+          },
+        };
+
+        beforeEach(() => {
+          promise = jest.fn().mockResolvedValue(scanResponse);
+          db = {
+            scan: jest.fn().mockReturnValue({ promise }),
+          };
+        });
+
+        describe('run', () => {
+          let result;
+
+          // expected result
+          const expectedResult = {
+            Items: scanResponse.Items,
+            nextToken:
+              '%7B%22id%22%3A%22id3%22%2C%22title%22%3A%22Task3%22%2C%22completed%22%3Afalse%7D',
+          };
+
+          beforeEach(async () => {
+            try {
+              // test
+              result = await new TodosRepository(
+                db,
+                tableName,
+                jest.fn(),
+              ).getAll({ limit });
+            } catch (e) {}
+          });
+
+          it('should call db.scan.promise once with right args', () => {
+            expect(promise).toBeCalledTimes(1);
+            expect(promise).toBeCalledWith();
+          });
+
+          it('should call db.scan once with right args', () => {
+            expect(db.scan).toBeCalledTimes(1);
+            expect(db.scan).toBeCalledWith({
+              TableName: tableName,
+              Limit: limit,
+            });
+          });
+
+          it('should resolve', () => {
+            expect(result).toEqual(expectedResult);
+          });
+        });
+      });
+    });
+    describe('when limit equals 3 and token is passed', () => {
+      const limit = 3;
+      const token =
+        '%7B%22id%22%3A%22id4%22%2C%22title%22%3A%22Task4%22%2C%22completed%22%3Atrue%7D';
+      describe('when tableName equals todos-dev and db.scan rejects', () => {
+        const tableName = 'todos-dev';
+        let db;
+        let promise;
+        const scanResponse = new Error('Error happened!');
+
+        beforeEach(() => {
+          promise = jest.fn().mockRejectedValue(scanResponse);
+          db = {
+            scan: jest.fn().mockReturnValue({ promise }),
+          };
+        });
+
+        describe('run', () => {
+          let result;
+
+          // expected result
+          const expectedResult = scanResponse;
+
+          beforeEach(async () => {
+            try {
+              // test
+              await new TodosRepository(db, tableName, jest.fn()).getAll({
+                limit,
+                token,
+              });
+            } catch (e) {
+              result = e;
+            }
+          });
+
+          it('should call db.scan.promise once with right args', () => {
+            expect(promise).toBeCalledTimes(1);
+            expect(promise).toBeCalledWith();
+          });
+
+          it('should call db.scan once with right args', () => {
+            expect(db.scan).toBeCalledTimes(1);
+            expect(db.scan).toBeCalledWith({
+              TableName: tableName,
+              Limit: limit,
+              ExclusiveStartKey: {
+                id: 'id4',
+                title: 'Task4',
+                completed: true,
+              },
+            });
+          });
+
+          it('should reject', () => {
+            expect(result).toEqual(expectedResult);
+          });
+        });
+      });
+
+      describe('when tableName equals todos-dev and db.scan resolves', () => {
+        const tableName = 'todos-dev';
+        let db;
+        let promise;
+        const scanResponse: DocumentClient.ScanOutput = {
+          Items: [
+            {
+              id: 'id1',
+              title: 'Task 1',
+              completed: true,
+            },
+            {
+              id: 'id2',
+              title: 'Task 2',
+              completed: false,
+            },
+          ],
+        };
+
+        beforeEach(() => {
+          promise = jest.fn().mockResolvedValue(scanResponse);
+          db = {
+            scan: jest.fn().mockReturnValue({ promise }),
+          };
+        });
+
+        describe('run', () => {
+          let result;
+
+          // expected result
+          const expectedResult = scanResponse;
+
+          beforeEach(async () => {
+            try {
+              // test
+              result = await new TodosRepository(
+                db,
+                tableName,
+                jest.fn(),
+              ).getAll({ limit, token });
+            } catch (e) {}
+          });
+
+          it('should call db.scan.promise once with right args', () => {
+            expect(promise).toBeCalledTimes(1);
+            expect(promise).toBeCalledWith();
+          });
+
+          it('should call db.scan once with right args', () => {
+            expect(db.scan).toBeCalledTimes(1);
+            expect(db.scan).toBeCalledWith({
+              TableName: tableName,
+              Limit: limit,
+              ExclusiveStartKey: {
+                id: 'id4',
+                title: 'Task4',
+                completed: true,
+              },
+            });
+          });
+
+          it('should resolve', () => {
+            expect(result).toEqual(expectedResult);
+          });
+        });
+      });
+
+      describe('when tableName equals todos-dev and db.scan resolves with LastEvaluatedKey object', () => {
+        const tableName = 'todos-dev';
+        let db;
+        let promise;
+        const scanResponse: DocumentClient.ScanOutput = {
+          Items: [
+            {
+              id: 'id1',
+              title: 'Task 1',
+              completed: true,
+            },
+            {
+              id: 'id2',
+              title: 'Task 2',
+              completed: false,
+            },
+          ],
+          ScannedCount: 2,
+          Count: 2,
+          LastEvaluatedKey: {
+            id: 'id3',
+            title: 'Task3',
+            completed: false,
+          },
+        };
+
+        beforeEach(() => {
+          promise = jest.fn().mockResolvedValue(scanResponse);
+          db = {
+            scan: jest.fn().mockReturnValue({ promise }),
+          };
+        });
+
+        describe('run', () => {
+          let result;
+
+          // expected result
+          const expectedResult = {
+            Items: scanResponse.Items,
+            nextToken:
+              '%7B%22id%22%3A%22id3%22%2C%22title%22%3A%22Task3%22%2C%22completed%22%3Afalse%7D',
+          };
+
+          beforeEach(async () => {
+            try {
+              // test
+              result = await new TodosRepository(
+                db,
+                tableName,
+                jest.fn(),
+              ).getAll({ limit, token });
+            } catch (e) {}
+          });
+
+          it('should call db.scan.promise once with right args', () => {
+            expect(promise).toBeCalledTimes(1);
+            expect(promise).toBeCalledWith();
+          });
+
+          it('should call db.scan once with right args', () => {
+            expect(db.scan).toBeCalledTimes(1);
+            expect(db.scan).toBeCalledWith({
+              TableName: tableName,
+              Limit: limit,
+              ExclusiveStartKey: {
+                id: 'id4',
+                title: 'Task4',
+                completed: true,
+              },
+            });
+          });
+
+          it('should resolve', () => {
+            expect(result).toEqual(expectedResult);
+          });
         });
       });
     });
