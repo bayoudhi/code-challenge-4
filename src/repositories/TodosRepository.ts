@@ -33,10 +33,15 @@ export default class TodosRepository implements ITodosRepository {
     return newTodo;
   }
 
-  async update(
-    id: string,
-    todo: { title: string; completed: boolean },
-  ): Promise<Todo> {
+  async update({
+    id,
+    title,
+    completed,
+  }: {
+    id: string;
+    title: string;
+    completed: boolean;
+  }): Promise<Todo> {
     const resposne = await this.db
       .update({
         TableName: this.tableName,
@@ -53,8 +58,8 @@ export default class TodosRepository implements ITodosRepository {
           '#updatedAt': 'updatedAt',
         },
         ExpressionAttributeValues: {
-          ':title': todo.title,
-          ':completed': todo.completed,
+          ':title': title,
+          ':completed': completed,
           ':now': Date.now(),
         },
       })
