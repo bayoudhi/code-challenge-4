@@ -10,7 +10,11 @@ export const createHandler = ({
 }) => async (
   event: AppSyncResolverEvent<UpdateTodoArguments>,
 ): Promise<Todo> => {
-  return todosRepository.update(event.arguments.id, event.arguments.todo);
+  const { id, todo } = event.arguments;
+  return todosRepository.update(id, {
+    title: todo.title,
+    completed: todo.completed,
+  });
 };
 
 export const handler = createHandler({

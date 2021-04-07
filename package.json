@@ -10,7 +10,8 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "deploy:dev": "sls deploy --stage dev",
-    "deploy:prod": "sls deploy --stage prod"
+    "deploy:prod": "sls deploy --stage prod",
+    "prepare": "husky install"
   },
   "keywords": [],
   "author": "",
