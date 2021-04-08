@@ -36,7 +36,7 @@ type Mutation {
 }
 
 type Subscription {
-  onCreateTodo(): Todo @aws_subscribe(mutations: ["createTodo"])
-  onUpdateTodo(id: ID): Todo @aws_subscribe(mutations: ["updateTodo"])
-  onDeleteTodo(id: ID): Todo @aws_subscribe(mutations: ["deleteTodo"])
+  onCreateTodo: Todo @aws_subscribe(mutations: ["createTodo"])
+  onUpdateTodo: Todo @aws_subscribe(mutations: ["updateTodo"])
+  onDeleteTodo: Todo @aws_subscribe(mutations: ["deleteTodo"])
 }
