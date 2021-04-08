@@ -3,6 +3,7 @@ scalar Long
 schema {
   query: Query
   mutation: Mutation
+  subscription: Subscription
 }
 
 type Todo {
@@ -32,4 +33,10 @@ type Mutation {
   createTodo(title: String!): Todo
   updateTodo(id: ID!, todo: UpdateTodoInput!): Todo
   deleteTodo(id: ID!): Todo
+}
+
+type Subscription {
+  onCreateTodo(id: ID): Todo @aws_subscribe(mutations: ["createTodo"])
+  onUpdateTodo(id: ID): Todo @aws_subscribe(mutations: ["updateTodo"])
+  onDeleteTodo(id: ID): Todo @aws_subscribe(mutations: ["deleteTodo"])
 }
