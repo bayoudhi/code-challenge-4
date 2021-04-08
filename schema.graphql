@@ -1,42 +1,43 @@
-scalar Long
-
-schema {
-  query: Query
-  mutation: Mutation
-  subscription: Subscription
-}
-
-type Todo {
-  id: ID!
-  title: String!
-  completed: Boolean!
-  createdAt: Long!
-  updatedAt: Long!
-}
-
-type Todos {
-  Items: [Todo!]!
-  nextToken: String
-}
-
-input UpdateTodoInput {
-  title: String!
-  completed: Boolean!
+type Mutation {
+	createTodo(title: String!): Todo
+	updateTodo(id: ID!, todo: UpdateTodoInput!): Todo
+	deleteTodo(id: ID!): Todo
 }
 
 type Query {
-  getTodo(id: ID!): Todo
-  getTodos(limit: Int, token: String): Todos
-}
-
-type Mutation {
-  createTodo(title: String!): Todo
-  updateTodo(id: ID!, todo: UpdateTodoInput!): Todo
-  deleteTodo(id: ID!): Todo
+	getTodo(id: ID!): Todo
+	getTodos(limit: Int, token: String): Todos
 }
 
 type Subscription {
-  onCreateTodo: Todo @aws_subscribe(mutations: ["createTodo"])
-  onUpdateTodo: Todo @aws_subscribe(mutations: ["updateTodo"])
-  onDeleteTodo: Todo @aws_subscribe(mutations: ["deleteTodo"])
+	onCreateTodo: Todo
+		@aws_subscribe(mutations: ["createTodo"])
+	onUpdateTodo: Todo
+		@aws_subscribe(mutations: ["updateTodo"])
+	onDeleteTodo: Todo
+		@aws_subscribe(mutations: ["deleteTodo"])
+}
+
+type Todo {
+	id: ID!
+	title: String!
+	completed: Boolean!
+	createdAt: Long!
+	updatedAt: Long!
+}
+
+type Todos {
+	Items: [Todo!]!
+	nextToken: String
+}
+
+input UpdateTodoInput {
+	title: String!
+	completed: Boolean!
+}
+
+schema {
+	query: Query
+	mutation: Mutation
+	subscription: Subscription
 }
