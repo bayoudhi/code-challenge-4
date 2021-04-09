@@ -7,6 +7,7 @@ const serverlessConfiguration: AWS = {
     'serverless-webpack',
     'serverless-appsync-plugin',
     'serverless-prune-plugin',
+    'serverless-stack-output',
   ],
   provider: {
     name: 'aws',
@@ -38,6 +39,9 @@ const serverlessConfiguration: AWS = {
     prune: {
       automatic: true,
       number: 3,
+    },
+    output: {
+      file: 'stack.json',
     },
     appSync: {
       name: '${self:service}-${self:provider.stage}-api',
