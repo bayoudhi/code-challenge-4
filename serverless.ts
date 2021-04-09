@@ -3,7 +3,11 @@ import type { AWS } from '@serverless/typescript';
 const serverlessConfiguration: AWS = {
   service: 'code-challenge-4',
   frameworkVersion: '2',
-  plugins: ['serverless-webpack', 'serverless-appsync-plugin'],
+  plugins: [
+    'serverless-webpack',
+    'serverless-appsync-plugin',
+    'serverless-prune-plugin',
+  ],
   provider: {
     name: 'aws',
     runtime: 'nodejs14.x',
