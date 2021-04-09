@@ -17,5 +17,3 @@ export const createHandler = ({
 export const handler = createHandler({
   todosRepository,
 });
-
-export const x = '';
