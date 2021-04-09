@@ -31,6 +31,10 @@ const serverlessConfiguration: AWS = {
       includeModules: true,
       packager: 'yarn',
     },
+    prune: {
+      automatic: true,
+      number: 3,
+    },
     appSync: {
       name: '${self:service}-${self:provider.stage}-api',
       authenticationType: 'API_KEY',
