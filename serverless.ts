@@ -33,7 +33,7 @@ const serverlessConfiguration: AWS = {
     todos_table_name: '${self:service}-${self:provider.stage}-todos',
     webpack: {
       webpackConfig: './webpack.config.js',
-      includeModules: true,
+      includeModules: false,
       packager: 'yarn',
     },
     prune: {
@@ -130,21 +130,52 @@ const serverlessConfiguration: AWS = {
   package: {
     individually: true,
   },
+  layers: {
+    modules: {
+      name: '${self:service}-${self:provider.stage}-node-modules',
+      path: 'layer',
+    },
+  },
   functions: {
     createTodo: {
       handler: 'src/lambdas/createTodo.handler',
+      layers: [
+        {
+          Ref: 'ModulesLambdaLayer',
+        },
+      ],
     },
     deleteTodo: {
       handler: 'src/lambdas/deleteTodo.handler',
+      layers: [
+        {
+          Ref: 'ModulesLambdaLayer',
+        },
+      ],
     },
     getTodo: {
       handler: 'src/lambdas/getTodo.handler',
+      layers: [
+        {
+          Ref: 'ModulesLambdaLayer',
+        },
+      ],
     },
     getTodos: {
       handler: 'src/lambdas/getTodos.handler',
+      layers: [
+        {
+          Ref: 'ModulesLambdaLayer',
+        },
+      ],
     },
     updateTodo: {
       handler: 'src/lambdas/updateTodo.handler',
+      layers: [
+        {
+          Ref: 'ModulesLambdaLayer',
+        },
+      ],
     },
   },
   resources: {

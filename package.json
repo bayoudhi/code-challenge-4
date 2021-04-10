@@ -9,8 +9,9 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
-    "deploy:dev": "sls deploy --stage dev",
-    "deploy:prod": "sls deploy --stage prod",
+    "pre-deploy": "chmod +x ./scripts/pre-deploy.sh && ./scripts/pre-deploy.sh",
+    "deploy:dev": "yarn run pre-deploy && sls deploy --stage dev",
+    "deploy:prod": "yarn run pre-deploy && sls deploy --stage prod",
     "prepare": "husky install"
   },
   "keywords": [],
@@ -38,7 +39,8 @@
     "ts-loader": "^8.1.0",
     "ts-node": "^9.1.1",
     "typescript": "^4.2.3",
-    "webpack": "^5.30.0"
+    "webpack": "^5.30.0",
+    "webpack-node-externals": "^2.5.2"
   },
   "dependencies": {
     "aws-lambda": "1.0.6",
