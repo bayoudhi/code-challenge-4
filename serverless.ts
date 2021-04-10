@@ -3,7 +3,12 @@ import type { AWS } from '@serverless/typescript';
 const serverlessConfiguration: AWS = {
   service: 'code-challenge-4',
   frameworkVersion: '2',
-  plugins: ['serverless-webpack', 'serverless-appsync-plugin'],
+  plugins: [
+    'serverless-webpack',
+    'serverless-appsync-plugin',
+    'serverless-prune-plugin',
+    'serverless-stack-output',
+  ],
   provider: {
     name: 'aws',
     runtime: 'nodejs14.x',
@@ -28,8 +33,15 @@ const serverlessConfiguration: AWS = {
     todos_table_name: '${self:service}-${self:provider.stage}-todos',
     webpack: {
       webpackConfig: './webpack.config.js',
-      includeModules: true,
+      includeModules: false,
       packager: 'yarn',
+    },
+    prune: {
+      automatic: true,
+      number: 3,
+    },
+    output: {
+      file: 'stack.json',
     },
     appSync: {
       name: '${self:service}-${self:provider.stage}-api',
@@ -118,21 +130,52 @@ const serverlessConfiguration: AWS = {
   package: {
     individually: true,
   },
+  layers: {
+    modules: {
+      name: '${self:service}-${self:provider.stage}-node-modules',
+      path: 'layer',
+    },
+  },
   functions: {
     createTodo: {
       handler: 'src/lambdas/createTodo.handler',
+      layers: [
+        {
+          Ref: 'ModulesLambdaLayer',
+        },
+      ],
     },
     deleteTodo: {
       handler: 'src/lambdas/deleteTodo.handler',
+      layers: [
+        {
+          Ref: 'ModulesLambdaLayer',
+        },
+      ],
     },
     getTodo: {
       handler: 'src/lambdas/getTodo.handler',
+      layers: [
+        {
+          Ref: 'ModulesLambdaLayer',
+        },
+      ],
     },
     getTodos: {
       handler: 'src/lambdas/getTodos.handler',
+      layers: [
+        {
+          Ref: 'ModulesLambdaLayer',
+        },
+      ],
     },
     updateTodo: {
       handler: 'src/lambdas/updateTodo.handler',
+      layers: [
+        {
+          Ref: 'ModulesLambdaLayer',
+        },
+      ],
     },
   },
   resources: {
