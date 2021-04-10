@@ -14,6 +14,8 @@ const serverlessConfiguration: AWS = {
     runtime: 'nodejs14.x',
     stage: "${opt:stage, 'dev'}",
     lambdaHashingVersion: '20201221',
+    memorySize: 128,
+    timeout: 6,
     iamRoleStatements: [
       {
         Effect: 'Allow',
