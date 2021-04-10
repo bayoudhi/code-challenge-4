@@ -44,6 +44,11 @@ This solution uses GitHub Actions CI/CD pipeline to continuously build and deplo
 
 ### Deploy to Prod
 ![image](https://user-images.githubusercontent.com/3085156/114269458-18fee400-99ff-11eb-8473-8e95b9dbbe0c.png)
+### Examples
+![image](https://user-images.githubusercontent.com/3085156/114270146-af80d480-9a02-11eb-953a-d8232f885147.png)
+![image](https://user-images.githubusercontent.com/3085156/114270060-2bc6e800-9a02-11eb-8fd8-8cedc5520053.png)
+![image](https://user-images.githubusercontent.com/3085156/114270105-83fdea00-9a02-11eb-886b-25cd9a2df43e.png)
+![image](https://user-images.githubusercontent.com/3085156/114270084-6597ee80-9a02-11eb-95a6-df4aa9b6241b.png)
 
 
 ## Test
