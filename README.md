@@ -52,7 +52,7 @@ This solution uses GitHub Actions CI/CD pipeline to continuously build and deplo
 
 
 ## Test
-This solution is developed using the **TDD approach** and is tested using **jest** library. You can find the tests in the /src/__tests__ folder.
+This solution is developed using the **TDD approach** and is tested using **jest** library. You can find the tests in the /src/\_\_tests\_\_ folder.
 
 ## Installed Serverless Framework Plugins
 ### [serverless-webpack](https://github.com/serverless-heaven/serverless-webpack)
