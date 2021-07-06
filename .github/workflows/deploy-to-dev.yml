@@ -13,13 +13,19 @@ jobs:
       - name: node
         uses: actions/setup-node@v1
         with:
-          node-version: "14.x"
+          node-version: '14.x'
       - name: 📦 Install dependencies
         run: yarn
       - name: 🔣 Lint
         run: yarn types && yarn lint
-      - name: 🧪 Unit test
-        run: yarn test
+      # - name: 🧪 Unit test
+      #   run: yarn test
+      - uses: artiomtr/jest-coverage-report-action@v2.0-rc.1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          test-script: npm run test:ci
+          skip-step: install
+          threshold: 80
       - name: 🚀 Deploy to Dev
         run: yarn deploy:dev
         env:
