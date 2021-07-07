@@ -59,5 +59,3 @@ This solution is developed using the **TDD approach** and is tested using **jest
 ### [serverless-appsync-plugin](https://github.com/sid88in/serverless-appsync-plugin)
 ### [serverless-prune-plugin](https://github.com/claygregory/serverless-prune-plugin)
 ### [serverless-stack-output](https://github.com/sbstjn/serverless-stack-output)
-
-
