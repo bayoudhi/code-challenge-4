@@ -18,14 +18,8 @@ jobs:
         run: yarn
       - name: 🔣 Lint
         run: yarn types && yarn lint
-      # - name: 🧪 Unit test
-      #   run: yarn test
-      - uses: artiomtr/jest-coverage-report-action@v2.0-rc.1
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          test-script: npm run test:ci
-          skip-step: install
-          threshold: 80
+      - name: 🧪 Unit test
+        run: yarn test:ci
       - name: 🚀 Deploy to Dev
         run: yarn deploy:dev
         env:

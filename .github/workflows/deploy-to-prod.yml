@@ -20,7 +20,7 @@ jobs:
       - name: 🔣 Lint
         run: yarn types && yarn lint
       - name: 🧪 Unit test
-        run: yarn test
+        run: yarn test:ci
       - name: 🚀 Deploy to Prod
         run: yarn deploy:prod
         env:
